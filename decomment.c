@@ -71,7 +71,7 @@ handleStringState(int c) {
         putchar(c);
         state = CODE;
     } else if (c == '\\') {
-        pputchar(c);
+        putchar(c);
         state = ESCAPE_STRING;
     } else if (c == '/') {
         state = handleCommentBeginState(c);
