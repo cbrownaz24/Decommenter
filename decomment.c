@@ -1,17 +1,20 @@
 #include <stdio.h>
 #include <ctype.h>
 
-enum Statetype {CODE, COMMENT_BEGIN, COMMENT, COMMENT_END, STRING, ESCAPE_STRING, CHAR, ESCAPE_CHAR};
+enum Statetype {CODE, COMMENT, STRING, ESCAPE_STRING, CHAR, ESCAPE_CHAR};
 
 handleCodeState(int c) {
     enum Statetype state;
     if (c == '/') {
-        state = COMMENT_BEGIN;
+        state = handleCommentBeginState(c);
     } else if (c == '\'') {
+        putchar(c);
         state = CHAR;
     } else if (c == '"') {
+        putchar(c);
         state = STRING;
     } else {
+        putchar(c);
         state = CODE;
     }
     return state;
@@ -19,11 +22,17 @@ handleCodeState(int c) {
 
 handleCommentBeginState(int c) {
     enum Statetype state;
-    if (c == '/') {
-        state = COMMENT_BEGIN;
-    } else if (c == '*') {
+    int c_next;
+    c_next = getchar();
+    if (c_next == '/') {
+        putchar(c);
+        handleCommentBeginState(c_next);
+    } else if (c_next == '*') {
+        putchar(' ');
         state = COMMENT;
     } else {
+        putchar(c);
+        putchar(c_next);
         state = CODE;
     }
     return state;
@@ -32,7 +41,7 @@ handleCommentBeginState(int c) {
 handleCommentState(int c) {
     enum Statetype state;
     if (c == '*') {
-        state = COMMENT_END;
+        state = handleCommentEndState(c);
     } else {
         state = COMMENT;
     }
@@ -41,12 +50,17 @@ handleCommentState(int c) {
 
 handleCommentEndState(int c) {
     enum Statetype state;
-    if (c == '*') {
-        state = COMMENT_END;
-    } else if (c == '/') {
+    int c_next;
+    c_next = getchar();
+    if (c_next == '/') {
         state = CODE;
+    } else if (c_next == '*') {
+        putchar(c);
+        state = handleCommentEndState(c_next);
     } else {
-        state = COMMENT;
+        putchar(c);
+        putchar(c_next);
+        state = CODE;
     }
     return state;
 }
@@ -54,10 +68,15 @@ handleCommentEndState(int c) {
 handleStringState(int c) {
     enum Statetype state;
     if (c == '"') {
+        putchar(c);
         state = CODE;
     } else if (c == '\\') {
+        pputchar(c);
         state = ESCAPE_STRING;
+    } else if (c == '/') {
+        state = handleCommentBeginState(c);
     } else {
+        putchar(c);
         state = STRING;
     }
     return state;
@@ -66,8 +85,10 @@ handleStringState(int c) {
 handleEscapeStringState(int c) {
     enum Statetype state;
     if (c == '\\') {
+        putchar(c);
         state = ESCAPE_STRING;
     } else {
+        putchar(c);
         state = STRING;
     }
     return state;
@@ -76,10 +97,13 @@ handleEscapeStringState(int c) {
 handleCharState(int c) {
     enum Statetype state;
     if (c == '\\') {
+        putchar(c);
         state = ESCAPE_CHAR;
     } else if (c == '\'') {
+        putchar(c);
         state = CODE;
     } else {
+        putchar(c);
         state = CHAR;
     }
     return state;
@@ -88,8 +112,10 @@ handleCharState(int c) {
 handleEscapeCharState(int c) {
     enum Statetype state;
     if (c == '\\') {
+        putchar(c);
         state = ESCAPE_CHAR;
     } else {
+        putchar(c);
         state = CHAR;
     }
     return state;
@@ -104,16 +130,8 @@ int main(void) {
                 state = handleCodeState(c);
             break;
 
-            case COMMENT_BEGIN:
-                state = handleCommentBeginState(c);
-            break;
-
             case COMMENT:
                 state = handleCommentState(c);
-            break;
-
-            case COMMENT_END:
-                state = handleCommentEndState(c);
             break;
 
             case STRING:
