@@ -3,30 +3,13 @@
 
 enum Statetype {CODE, COMMENT, STRING, ESCAPE_STRING, CHAR, ESCAPE_CHAR};
 
-handleCodeState(int c) {
-    enum Statetype state;
-    if (c == '/') {
-        state = handleCommentBeginState(c);
-    } else if (c == '\'') {
-        putchar(c);
-        state = CHAR;
-    } else if (c == '"') {
-        putchar(c);
-        state = STRING;
-    } else {
-        putchar(c);
-        state = CODE;
-    }
-    return state;
-}
-
 handleCommentBeginState(int c) {
     enum Statetype state;
     int c_next;
     c_next = getchar();
     if (c_next == '/') {
         putchar(c);
-        handleCommentBeginState(c_next);
+        state = handleCommentBeginState(c_next);
     } else if (c_next == '*') {
         putchar(' ');
         state = COMMENT;
@@ -34,16 +17,6 @@ handleCommentBeginState(int c) {
         putchar(c);
         putchar(c_next);
         state = CODE;
-    }
-    return state;
-}
-
-handleCommentState(int c) {
-    enum Statetype state;
-    if (c == '*') {
-        state = handleCommentEndState(c);
-    } else {
-        state = COMMENT;
     }
     return state;
 }
@@ -61,6 +34,33 @@ handleCommentEndState(int c) {
         putchar(c);
         putchar(c_next);
         state = CODE;
+    }
+    return state;
+}
+
+handleCodeState(int c) {
+    enum Statetype state;
+    if (c == '/') {
+        state = handleCommentBeginState(c);
+    } else if (c == '\'') {
+        putchar(c);
+        state = CHAR;
+    } else if (c == '"') {
+        putchar(c);
+        state = STRING;
+    } else {
+        putchar(c);
+        state = CODE;
+    }
+    return state;
+}
+
+handleCommentState(int c) {
+    enum Statetype state;
+    if (c == '*') {
+        state = handleCommentEndState(c);
+    } else {
+        state = COMMENT;
     }
     return state;
 }
