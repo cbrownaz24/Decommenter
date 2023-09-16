@@ -156,8 +156,11 @@ int main(void) {
             case ESCAPE_CHAR:
                 state = handleEscapeCharState(c);
             break;
+        } 
+        
+        if (c == '\n') {
+            current_line_number++;
         }
-        current_line_number++;
     }
 
     if (state == COMMENT) {
