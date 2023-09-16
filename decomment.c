@@ -125,13 +125,12 @@ int handleEscapeCharState(int c) {
 
 int main(void) {
     int c, current_line_number, last_comment;
+    enum Statetype state = CODE;
+    enum Exittype {EXIT_FAILURE, EXIT_SUCCESS};
+
+    enum Exittype exit;
     current_line_number = 1;
 
-    enum Statetype state = CODE;
-
-    enum Exittype {EXIT_FAILURE, EXIT_SUCCESS};
-    enum Exittype exit;
-    
     while((c = getchar()) != EOF) {
         switch (state) {
             case CODE:
