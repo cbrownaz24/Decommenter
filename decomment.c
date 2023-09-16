@@ -37,14 +37,10 @@ int handleCommentEndState(int c) {
     return state;
 }
 
-int handleCommentState(int c, int *current_line_number) {
+int handleCommentState(int c) {
     enum Statetype state;
     if (c == '*') {
         state = handleCommentEndState(c);
-    } else if (c == '\n') {
-        putchar(c);
-        *current_line_number++;
-        state = COMMENT;
     } else {
         state = COMMENT;
     }
@@ -137,7 +133,7 @@ int main(void) {
             break;
 
             case COMMENT:
-                state = handleCommentState(c, &current_line_number);
+                state = handleCommentState(c);
             break;
 
             case STRING:
@@ -158,6 +154,7 @@ int main(void) {
         } 
         
         if (c == '\n') {
+            putchar(c);
             current_line_number++;
         }
     }
