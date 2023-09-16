@@ -69,6 +69,7 @@ handleCommentNewlineBeginState(int c) {
     } else {
         state = COMMENT;
     }
+    return state;
 }
 handleCodeState(int c) {
     enum Statetype state;
