@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <ctype.h>
+#include <stdbool.h>
 
 enum Statetype {CODE, COMMENT, STRING, ESCAPE_STRING, CHAR, ESCAPE_CHAR};
+bool inString = false;
 
 handleCommentBeginState(int c) {
     enum Statetype state;
@@ -26,29 +28,16 @@ handleCommentEndState(int c) {
     int c_next;
     c_next = getchar();
     if (c_next == '/') {
-        state = CODE;
+        if (inString) {
+            state = STRING;
+        } else {
+            state = CODE;
+        }
     } else if (c_next == '*') {
         putchar(c);
         state = handleCommentEndState(c_next);
     } else {
         state = COMMENT;
-    }
-    return state;
-}
-
-handleCodeState(int c) {
-    enum Statetype state;
-    if (c == '/') {
-        state = handleCommentBeginState(c);
-    } else if (c == '\'') {
-        putchar(c);
-        state = CHAR;
-    } else if (c == '"') {
-        putchar(c);
-        state = STRING;
-    } else {
-        putchar(c);
-        state = CODE;
     }
     return state;
 }
@@ -63,10 +52,45 @@ handleCommentState(int c) {
     return state;
 }
 
+handleCommentNewlineBeginState(int c) {
+    enum Statetype state;
+    int c_next;
+    c_next = getchar();
+    if (c_next == 'n') {
+        putchar(c);
+        putchar(c_next);
+        state = COMMENT;
+    } else if (c_next == '\\') {
+        state = handleCommentNewlineBeginState(c_next);
+    } else if (c_next == '*') {
+        state = handleCommentEndState(c_next);
+    } else {
+        state = COMMENT;
+    }
+}
+handleCodeState(int c) {
+    enum Statetype state;
+    if (c == '/') {
+        state = handleCommentBeginState(c);
+    } else if (c == '\'') {
+        putchar(c);
+        state = CHAR;
+    } else if (c == '"') {
+        putchar(c);
+        inString = true;
+        state = STRING;
+    } else {
+        putchar(c);
+        state = CODE;
+    }
+    return state;
+}
+
 handleStringState(int c) {
     enum Statetype state;
     if (c == '"') {
         putchar(c);
+        inString = false;
         state = CODE;
     } else if (c == '\\') {
         putchar(c);
