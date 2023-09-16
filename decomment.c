@@ -31,9 +31,7 @@ handleCommentEndState(int c) {
         putchar(c);
         state = handleCommentEndState(c_next);
     } else {
-        putchar(c);
-        putchar(c_next);
-        state = CODE;
+        state = COMMENT;
     }
     return state;
 }
