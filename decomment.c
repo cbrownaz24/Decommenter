@@ -43,6 +43,7 @@ int handleCommentState(int c) {
         state = handleCommentEndState(c);
     } else if (c == '\n') {
         putchar(c);
+        state = COMMENT;
      } else {
         state = COMMENT;
     }
