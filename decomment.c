@@ -3,17 +3,17 @@
 #include <stdbool.h>
 
 enum Statetype {CODE, COMMENT, STRING, ESCAPE_STRING, CHAR, ESCAPE_CHAR};
-bool inString = false;
 
-int handleCommentBeginState(int c) {
+int handleCommentBeginState(int c, int *current_line_number, int *last_comment) {
     enum Statetype state;
     int c_next;
     c_next = getchar();
     if (c_next == '/') {
         putchar(c);
-        state = handleCommentBeginState(c_next);
+        state = handleCommentBeginState(c_next, current_line_number, last_comment);
     } else if (c_next == '*') {
         putchar(' ');
+        *last_comment = *current_line_number;
         state = COMMENT;
     } else {
         putchar(c);
@@ -28,11 +28,7 @@ int handleCommentEndState(int c) {
     int c_next;
     c_next = getchar();
     if (c_next == '/') {
-        if (inString) {
-            state = STRING;
-        } else {
-            state = CODE;
-        }
+        state = CODE;
     } else if (c_next == '*') {
         putchar(c);
         state = handleCommentEndState(c_next);
@@ -42,46 +38,29 @@ int handleCommentEndState(int c) {
     return state;
 }
 
-int handleCommentNewlineBeginState(int c) {
-    enum Statetype state;
-    int c_next;
-    c_next = getchar();
-    if (c_next == 'n') {
-        putchar(c);
-        putchar(c_next);
-        state = COMMENT;
-    } else if (c_next == '\\') {
-        state = handleCommentNewlineBeginState(c_next);
-    } else if (c_next == '*') {
-        state = handleCommentEndState(c_next);
-    } else {
-        state = COMMENT;
-    }
-    return state;
-}
-
-int handleCommentState(int c) {
+int handleCommentState(int c, int *current_line_number) {
     enum Statetype state;
     if (c == '*') {
         state = handleCommentEndState(c);
-    } else if (c == '\\') {
-        state = handleCommentNewlineBeginState(c);
+    } else if (c == '\n') {
+        putchar(c);
+        *current_line_number++;
+        state = COMMENT;
     } else {
         state = COMMENT;
     }
     return state;
 }
 
-int handleCodeState(int c) {
+int handleCodeState(int c, int *current_line_number, int *last_comment) {
     enum Statetype state;
     if (c == '/') {
-        state = handleCommentBeginState(c);
+        state = handleCommentBeginState(c, current_line_number, last_comment);
     } else if (c == '\'') {
         putchar(c);
         state = CHAR;
     } else if (c == '"') {
         putchar(c);
-        inString = true;
         state = STRING;
     } else {
         putchar(c);
@@ -94,13 +73,10 @@ int handleStringState(int c) {
     enum Statetype state;
     if (c == '"') {
         putchar(c);
-        inString = false;
         state = CODE;
     } else if (c == '\\') {
         putchar(c);
         state = ESCAPE_STRING;
-    } else if (c == '/') {
-        state = handleCommentBeginState(c);
     } else {
         putchar(c);
         state = STRING;
@@ -149,15 +125,17 @@ int handleEscapeCharState(int c) {
 
 int main(void) {
     int c;
+    int current_line_number, last_comment;
+    current_line_number = 1;
     enum Statetype state = CODE;
     while((c = getchar()) != EOF) {
         switch (state) {
             case CODE:
-                state = handleCodeState(c);
+                state = handleCodeState(c, &current_line_number, &last_comment);
             break;
 
             case COMMENT:
-                state = handleCommentState(c);
+                state = handleCommentState(c, &current_line_number);
             break;
 
             case STRING:
@@ -176,6 +154,7 @@ int main(void) {
                 state = handleEscapeCharState(c);
             break;
         }
+        current_line_number++;
     }
     return 0;
 }
