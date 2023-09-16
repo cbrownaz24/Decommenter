@@ -124,13 +124,14 @@ int handleEscapeCharState(int c) {
 }
 
 int main(void) {
-    enum Exittype {EXIT_FAILURE, EXIT_SUCCESS};
-
     int c, current_line_number, last_comment;
     current_line_number = 1;
 
     enum Statetype state = CODE;
 
+    enum Exittype {EXIT_FAILURE, EXIT_SUCCESS};
+    enum Exittype exit;
+    
     while((c = getchar()) != EOF) {
         switch (state) {
             case CODE:
@@ -159,7 +160,7 @@ int main(void) {
         }
         current_line_number++;
     }
-    enum Exittype exit;
+
     if (state == COMMENT) {
         printf("Error: line %d: unterminated comment", last_comment);
         exit = EXIT_FAILURE;
