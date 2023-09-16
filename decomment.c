@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <ctype.h>
-#include <stdbool.h>
 
 enum Statetype {CODE, COMMENT, STRING, ESCAPE_STRING, CHAR, ESCAPE_CHAR};
 
