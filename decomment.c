@@ -41,7 +41,9 @@ int handleCommentState(int c) {
     enum Statetype state;
     if (c == '*') {
         state = handleCommentEndState(c);
-    } else {
+    } else if (c == '\n') {
+        putchar(c);
+     } else {
         state = COMMENT;
     }
     return state;
@@ -154,7 +156,6 @@ int main(void) {
         } 
         
         if (c == '\n') {
-            putchar(c);
             current_line_number++;
         }
     }
