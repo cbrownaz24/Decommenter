@@ -42,18 +42,6 @@ handleCommentEndState(int c) {
     return state;
 }
 
-handleCommentState(int c) {
-    enum Statetype state;
-    if (c == '*') {
-        state = handleCommentEndState(c);
-    } else if (c == '\\') {
-        state = handleCommentNewlineBeginState(c);
-    } else {
-        state = COMMENT;
-    }
-    return state;
-}
-
 handleCommentNewlineBeginState(int c) {
     enum Statetype state;
     int c_next;
@@ -71,6 +59,19 @@ handleCommentNewlineBeginState(int c) {
     }
     return state;
 }
+
+handleCommentState(int c) {
+    enum Statetype state;
+    if (c == '*') {
+        state = handleCommentEndState(c);
+    } else if (c == '\\') {
+        state = handleCommentNewlineBeginState(c);
+    } else {
+        state = COMMENT;
+    }
+    return state;
+}
+
 handleCodeState(int c) {
     enum Statetype state;
     if (c == '/') {
