@@ -5,7 +5,7 @@
 enum Statetype {CODE, COMMENT, STRING, ESCAPE_STRING, CHAR, ESCAPE_CHAR};
 bool inString = false;
 
-handleCommentBeginState(int c) {
+int handleCommentBeginState(int c) {
     enum Statetype state;
     int c_next;
     c_next = getchar();
@@ -23,7 +23,7 @@ handleCommentBeginState(int c) {
     return state;
 }
 
-handleCommentEndState(int c) {
+int handleCommentEndState(int c) {
     enum Statetype state;
     int c_next;
     c_next = getchar();
@@ -42,7 +42,7 @@ handleCommentEndState(int c) {
     return state;
 }
 
-handleCommentNewlineBeginState(int c) {
+int handleCommentNewlineBeginState(int c) {
     enum Statetype state;
     int c_next;
     c_next = getchar();
@@ -60,7 +60,7 @@ handleCommentNewlineBeginState(int c) {
     return state;
 }
 
-handleCommentState(int c) {
+int handleCommentState(int c) {
     enum Statetype state;
     if (c == '*') {
         state = handleCommentEndState(c);
@@ -72,7 +72,7 @@ handleCommentState(int c) {
     return state;
 }
 
-handleCodeState(int c) {
+int handleCodeState(int c) {
     enum Statetype state;
     if (c == '/') {
         state = handleCommentBeginState(c);
@@ -90,7 +90,7 @@ handleCodeState(int c) {
     return state;
 }
 
-handleStringState(int c) {
+int handleStringState(int c) {
     enum Statetype state;
     if (c == '"') {
         putchar(c);
@@ -108,7 +108,7 @@ handleStringState(int c) {
     return state;
 }
 
-handleEscapeStringState(int c) {
+int handleEscapeStringState(int c) {
     enum Statetype state;
     if (c == '\\') {
         putchar(c);
@@ -120,7 +120,7 @@ handleEscapeStringState(int c) {
     return state;
 }
 
-handleCharState(int c) {
+int handleCharState(int c) {
     enum Statetype state;
     if (c == '\\') {
         putchar(c);
@@ -135,7 +135,7 @@ handleCharState(int c) {
     return state;
 }   
 
-handleEscapeCharState(int c) {
+int handleEscapeCharState(int c) {
     enum Statetype state;
     if (c == '\\') {
         putchar(c);
