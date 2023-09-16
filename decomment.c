@@ -164,7 +164,7 @@ int main(void) {
     }
 
     if (state == COMMENT) {
-        printf("Error: line %d: unterminated comment", last_comment);
+        printf("Error: line %d: unterminated comment\n", last_comment);
         exit = EXIT_FAILURE;
     } else {
         exit = EXIT_SUCCESS;
