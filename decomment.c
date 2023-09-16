@@ -46,6 +46,8 @@ handleCommentState(int c) {
     enum Statetype state;
     if (c == '*') {
         state = handleCommentEndState(c);
+    } else if (c == '\\') {
+        state = handleCommentNewlineBeginState(c);
     } else {
         state = COMMENT;
     }
