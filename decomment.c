@@ -12,6 +12,7 @@ enum Statetype {
   ESCAPE_CHAR
   };
 
+/* ------------------------------------------------------------------ */
 /*
   Transition to the next logical state from a begin comment pattern, 
   according to the current character c. If a transition to the COMMENT 
@@ -52,6 +53,7 @@ int handleCommentBeginState(c, current_line, last_comment)
   return state;
 }
 
+/* ------------------------------------------------------------------ */
 /*
   Transition to the next logical state from an ending comment pattern,
   according to the current character c.
@@ -81,6 +83,7 @@ int handleCommentEndState(int c) {
   return state;
 }
 
+/* ------------------------------------------------------------------ */
 /*
   Transition to the next logical state from the previous COMMENT state, 
   according to the current character c. 
@@ -103,6 +106,7 @@ int handleCommentState(int c) {
   return state;
 }
 
+/* ------------------------------------------------------------------ */
 /*
   Transition to the next logical state from the previous CODE state, 
   according to the current character c. If c is a newline character,
@@ -135,6 +139,7 @@ int handleCodeState(int c, int *current_line, int *last_comment) {
   return state;
 }
 
+/* ------------------------------------------------------------------ */
 /*
   Transition to the next logical state from the previous STRING state, 
   according to the current character c. 
@@ -154,6 +159,7 @@ int handleStringState(int c) {
   return state;
 }
 
+/* ------------------------------------------------------------------ */
 /*
   Transition to the next logical state from the previous ESCAPE_STRING 
   state, according to the current character c. 
@@ -170,6 +176,7 @@ int handleEscapeStringState(int c) {
   return state;
 }
 
+/* ------------------------------------------------------------------ */
 /*
   Transition to the next logical state from the previous CHAR state, 
   according to the current character c. 
@@ -189,6 +196,7 @@ int handleCharState(int c) {
   return state;
 }   
 
+/* ------------------------------------------------------------------ */
 /*
   Transition to the next logical state from the previous ESCAPE_CHAR 
   state, according to the current character c. 
@@ -205,6 +213,7 @@ int handleEscapeCharState(int c) {
   return state;
 }
 
+/* ------------------------------------------------------------------ */
 int main(void) {
   /* c keeps track of the current character in file. */
   /* current_line tracks the current line in file. */
