@@ -91,8 +91,8 @@ int handleCommentState(int c) {
     state = COMMENT_END;
   } else if (c == '\n') {
     putchar(c);
-  }
-  else {
+    state = COMMENT;
+  } else {
     state = COMMENT;
   }
   return state;
