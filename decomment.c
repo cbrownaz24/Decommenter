@@ -29,10 +29,12 @@ int handleCodeState(int c) {
   else if (c == '\'') {
     putchar(c);
     state = CHAR;
-  } else if (c == '"') {
+  } 
+  else if (c == '"') {
     putchar(c);
     state = STRING;
-  } else {
+  } 
+  else {
     putchar(c);
     state = CODE;
   }
@@ -100,10 +102,12 @@ int handleCommentState(int c) {
 
   if (c == '*') {
     state = COMMENT_END;
-  } else if (c == '\n') {
+  } 
+  else if (c == '\n') {
     putchar(c);
     state = COMMENT;
-  } else {
+  } 
+  else {
     state = COMMENT;
   }
   return state;
@@ -127,6 +131,9 @@ int handleCommentEndState(int c) {
   else if (c == '*') {
     state = COMMENT_END;
   } 
+  else if (c == '\n') {
+    putchar(c);
+  }
   else {
     state = COMMENT;
   }
@@ -143,10 +150,12 @@ int handleStringState(int c) {
   if (c == '"') {
     putchar(c);
     state = CODE;
-  } else if (c == '\\') {
+  } 
+  else if (c == '\\') {
     putchar(c);
     state = ESCAPE_STRING;
-  } else {
+  } 
+  else {
     putchar(c);
     state = STRING;
   }
@@ -163,7 +172,8 @@ int handleEscapeStringState(int c) {
   if (c == '\\') {
     putchar(c);
     state = ESCAPE_STRING;
-  } else {
+  } 
+  else {
     putchar(c);
     state = STRING;
   }
@@ -179,10 +189,12 @@ int handleCharState(int c) {
   if (c == '\\') {
     putchar(c);
     state = ESCAPE_CHAR;
-  } else if (c == '\'') {
+  } 
+  else if (c == '\'') {
     putchar(c);
     state = CODE;
-  } else {
+  } 
+  else {
     putchar(c);
     state = CHAR;
   }
@@ -199,7 +211,8 @@ int handleEscapeCharState(int c) {
   if (c == '\\') {
     putchar(c);
     state = ESCAPE_CHAR;
-  } else {
+  } 
+  else {
     putchar(c);
     state = CHAR;
   }
@@ -276,7 +289,8 @@ int main(void) {
       last_comment
       );
     exit(EXIT_FAILURE);
-  } else {
+  } 
+  else {
     exit(EXIT_SUCCESS);
   }
 }
