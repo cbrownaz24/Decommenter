@@ -266,5 +266,4 @@ int main(void) {
   } else {
     exit(EXIT_SUCCESS);
   }
-  return exit;
 }
