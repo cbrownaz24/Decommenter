@@ -89,7 +89,7 @@ int handleCommentState(int c) {
 
   if (c == '*') {
     state = COMMENT_END;
-  } else if (c == '/n') {
+  } else if (c == '\n') {
     putchar(c);
   }
   else {
