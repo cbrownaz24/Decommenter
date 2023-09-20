@@ -70,7 +70,18 @@ int handleCommentStartState(
     state = COMMENT;
   }
   /* Any other character indicates that there is neither a comment nor 
-  the potential start of one. Transition back to CODE state. */
+  the potential start of one. Transition back to appropriate non-COMMENT
+   state. */
+  else if (c == '\"') {
+    putchar('/');
+    putchar(c);
+    state = STRING;
+  }
+  else if (c == '\'') {
+    putchar('/');
+    putchar(c);
+    state = CHAR;
+  }
   else {
     putchar('/');
     putchar(c);
