@@ -133,7 +133,7 @@ int handleCommentEndState(int c) {
   } 
   else if (c == '\n') {
     putchar(c);
-    state = CODE;
+    state = COMMENT;
   }
   else {
     state = COMMENT;
