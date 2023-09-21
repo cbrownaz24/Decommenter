@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 /* Enumerated states that the code text could potentially be in at any 
-given moment */
+given moment. */
 enum Statetype {
   CODE, 
   COMMENT_START,
