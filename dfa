@@ -28,7 +28,6 @@ STRING (accept)
     other : STRING
 
 ESCAPE_STRING (accept)
-    \\ : ESCAPE_STRING
     other : STRING
 
 CHAR (accept)
@@ -37,5 +36,4 @@ CHAR (accept)
     other : CHAR
 
 ESCAPE_CHAR (accept)
-    \\ : ESCAPE_CHAR
     other : CHAR
