@@ -170,14 +170,8 @@ int handleStringState(int c) {
 */
 int handleEscapeStringState(int c) {
   enum Statetype state; /* Keep track of which state to transition to */
-  if (c == '\\') {
-    putchar(c);
-    state = ESCAPE_STRING;
-  } 
-  else {
-    putchar(c);
-    state = STRING;
-  }
+  putchar(c);
+  state = STRING;
   return state;
 }
 
@@ -209,14 +203,8 @@ int handleCharState(int c) {
 */
 int handleEscapeCharState(int c) {
   enum Statetype state; /* Keep track of which state to transition to */
-  if (c == '\\') {
-    putchar(c);
-    state = ESCAPE_CHAR;
-  } 
-  else {
-    putchar(c);
-    state = CHAR;
-  }
+  putchar(c);
+  state = CHAR;
   return state;
 }
 
