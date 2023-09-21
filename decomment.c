@@ -283,7 +283,7 @@ int main(void) {
 
   /* If still in a COMMENT by end of file, then the comment was 
   unterminated. */
-  if (state == COMMENT) {
+  if (state == COMMENT || state == COMMENT_END) {
     fprintf(
       stderr, 
       "Error: line %d: unterminated comment\n", 

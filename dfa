@@ -1,0 +1,41 @@
+CODE (accept) <-- the start state
+    / : COMMENT_START
+    \' : CHAR
+    " : STRING
+    other : CODE
+
+COMMENT_BEGIN (accept)
+    / : COMMENT_START
+    * : COMMENT
+    " : STRING
+    \' : CHAR
+    other : CODE
+
+COMMENT (reject)
+    * : COMMENT_END
+    \n : COMMENT
+    other : COMMENT
+
+COMMENT_END (reject)
+    / : CODE
+    * : COMMENT_END
+    \n : COMMENT
+    other : COMMENT
+
+STRING (accept)
+    " : CODE
+    \\ : ESCAPE_STRING
+    other : STRING
+
+ESCAPE_STRING (accept)
+    \\ : ESCAPE_STRING
+    other : STRING
+
+CHAR (accept)
+    " : CODE
+    \\ : ESCAPE_CHAR
+    other : CHAR
+
+ESCAPE_CHAR (accept)
+    \\ : ESCAPE_CHAR
+    other : CHAR
