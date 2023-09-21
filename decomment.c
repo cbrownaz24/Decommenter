@@ -281,6 +281,12 @@ int main(void) {
     }
   }
 
+  /* Edge case where a file ends in COMMENT_START state. Since not a
+  comment, it must be printed. */
+  if (state == COMMENT_START) {
+    putchar('/');
+  }
+
   /* If still in a COMMENT by end of file, then the comment was 
   unterminated. */
   if (state == COMMENT || state == COMMENT_END) {
